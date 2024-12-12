@@ -19,8 +19,6 @@ async function crear(req, res) {
     }
 
 }
-
-
 async function borrar(req, res) {
     try{
         const id = req.params.id;
@@ -31,4 +29,4 @@ async function borrar(req, res) {
     }
 }
 
-export default Agenda;
+export default agenda;
