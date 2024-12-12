@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import Datos from './Datos'
+import Editar from './Editar'
+import Listar from './Listar'
 
 function App() {
   const [contacto, setContacto] = useState(null)
@@ -34,7 +36,7 @@ function App() {
     <>
       {contacto ?
         <Editar contacto={contacto} alActualizar={actualizar} /> :
-        <Lista contactos={contactos} alAgregar={agregar} alBorrar={borrar} />
+        <Listar contactos={contactos} alAgregar={agregar} alBorrar={borrar} />
       }
     </>
   )

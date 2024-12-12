@@ -1,7 +1,7 @@
 function listar(contactos, alAgregar, alBorrar) {
     return (
         <>
-            <h1>Contactos <button onClick={agregar}>Agregar</button></h1>
+            <h1>Contactos <button onClick={alAgregar}>Agregar</button></h1>
             {contactos.map(c =>
                 <section key={c.id}>
                     <p>{c.nombre}<b> {c.apellido}</b> </p>

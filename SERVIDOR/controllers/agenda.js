@@ -31,4 +31,4 @@ async function borrar(req, res) {
     }
 }
 
-export { listar, crear, borrar }
+export default Agenda;

@@ -1,10 +1,13 @@
 const base = "https://localhost:3000"
 async function llamar(ruta, metodo = "GET", datos = {}) {
-    let repuesta = await fetch(`${base}${ruta}`, {
+    let opciones = {
         method: metodo,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(datos)
-    })
+        headers: { 'Content-Type': 'application/json' }
+    }
+    if (metodo != "GET") {
+        opciones.body = JSON.stringify(datos)
+    }
+    let repuesta = await fetch(`${base}${ruta}`, opciones)
     return await repuesta.json()
 }
 
