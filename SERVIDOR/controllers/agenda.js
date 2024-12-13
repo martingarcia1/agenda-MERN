@@ -1,5 +1,4 @@
 import Datos from '../models/agenda.js'
-
 async function listar(req, res) {
     try {
         const datos = await Datos.leerTodo();
@@ -10,23 +9,23 @@ async function listar(req, res) {
 }
 
 async function crear(req, res) {
-    try{
+    try {
         const contacto = req.body;
         const id = await Datos.crear(contacto)
         res.json(id);
     } catch (error) {
-        res.status(500).json({ error: 'Error al crear el contacto'})
+        res.status(500).json({ error: 'Error al crear el contacto' })
     }
 
 }
 async function borrar(req, res) {
-    try{
+    try {
         const id = req.params.id;
         await Datos.borrar(id);
-        res.json({mensaje: 'Contacto eliminado'});
-    } catch(error){
-        res.status(500).json({error: 'Error al eliminar el contacto'});
+        res.json({ mensaje: 'Contacto eliminado' });
+    } catch (error) {
+        res.status(500).json({ error: 'Error al eliminar el contacto' });
     }
 }
 
-export default agenda;
+export default Agenda;
