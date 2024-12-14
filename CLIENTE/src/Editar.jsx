@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-// eslint-disable-next-line react/prop-types
+/* eslint-disable react/prop-types */
 function Editar({ contacto, alActualizar }) {
     const [datos, setDatos] = useState(contacto)
     function cambiar(e) {

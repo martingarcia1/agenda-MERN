@@ -36,7 +36,7 @@ async function crear(contacto) {
 
 async function borrar(id) {
     await conectar();
-    await contactos.deleteOne({_id: ObjectId(id)});
+    await contactos.deleteOne({_id: new ObjectId(id)});
 }
 
 export default { leerTodo, crear, borrar }

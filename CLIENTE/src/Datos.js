@@ -1,4 +1,4 @@
-const base = "https://localhost:3000"
+const base = "http://localhost:3000"
 async function llamar(ruta, metodo = "GET", datos = {}) {
     let opciones = {
         method: metodo,

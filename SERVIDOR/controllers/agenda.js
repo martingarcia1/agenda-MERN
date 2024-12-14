@@ -28,4 +28,8 @@ async function borrar(req, res) {
     }
 }
 
-export default Agenda;
+//asyc function leer(req, res){}
+//asyc function actualizar(req, res) {}
+
+
+export default {listar,crear, borrar};

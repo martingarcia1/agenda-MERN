@@ -1,4 +1,4 @@
-import Agenda from "../controllers/agenda";
+import Agenda from "../controllers/agenda.js";
 import express  from "express";
 
 const router = express.Router();

@@ -30,6 +30,7 @@ function App() {
 
   async function borrar(contacto) {
     await Datos.borrar(contacto._id)
+    setContactos(contactos.filter(c => c._id !== contacto._id))
   }
 
   return (
@@ -38,6 +39,7 @@ function App() {
         <Editar contacto={contacto} alActualizar={actualizar} /> :
         <Listar contactos={contactos} alAgregar={agregar} alBorrar={borrar} />
       }
+      
     </>
   )
 }

@@ -4,8 +4,9 @@ import Agenda from './routers/agenda.js';
 
 const app = express();
 
-app.use(cors());
 app.use(express.json());
+app.use(cors());
+
 app.use("/contactos", Agenda)
 
 app.listen(3000, () => {
