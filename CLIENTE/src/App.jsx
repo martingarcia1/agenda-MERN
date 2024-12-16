@@ -9,9 +9,10 @@ function App() {
   let [mensaje, setMensaje] = React.useState('')
   let [user, setUser] = React.useState('')
   let [password, setPassword] = React.useState('')
-  let [showRegistro, setShowRegistro] = React.useState(true)
+  let [showRegistro, setShowRegistro] = React.useState(false)
   let [showLogin, setShowLogin] = React.useState(false)
   let [showInfo, setShowInfo] = React.useState(false)
+  let [showForm, setShowForm] = React.useState(true)
   let [loginUser, setLoginUser] = React.useState('')
   let [loginPassword, setLoginPassword] = React.useState('')
 
@@ -48,6 +49,7 @@ function App() {
     if (res.ok) {
       setShowLogin(false);
       setShowInfo(true);
+      setShowForm(false);
     }
 
   }
@@ -70,6 +72,7 @@ function App() {
     setMensaje(data.mensaje);
     setShowInfo(false);
     setShowLogin(true);
+    setShowForm(true)
   }
   async function cargar() {
     let lista = await Datos.listar()
@@ -101,19 +104,10 @@ function App() {
     <div>
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', backgroundColor: '#fff', borderBottom: '1px solid #ccc' }}>
         <h1 style={{ margin: 0 }}>AgendaPro</h1>
-        {!showInfo && (
-          <div>
-            {showLogin || showRegistro ? (
-              <>
-                <button onClick={() => { setShowRegistro(true); setShowLogin(false); }}>Registrar</button>
-                <button onClick={() => { setShowRegistro(false); setShowLogin(true); }}>Ingresar</button>
-              </>
-            ) : null}
-          </div>
-        )}
-        {showInfo && (
-          <button onClick={logout}>Cerrar sesión</button>
-        )}
+        <div>
+          <button onClick={() => { setShowRegistro(true); setShowLogin(false); }}>Registrar</button>
+          <button onClick={() => { setShowRegistro(false); setShowLogin(true); }}>Ingresar</button>
+        </div>
       </header>
 
       <main>
@@ -142,8 +136,8 @@ function App() {
               <label>Contraseña</label>
               <input type="password" placeholder="Contraseña" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} />
               <span>
-                <button onClick={login}>Iniciar sesión</button>
-                <button onClick={() => { setShowRegistro(true); setShowLogin(false); }}>Registrarse</button>
+                <button type="button" onClick={login}>Iniciar sesión</button>
+                <button type="button" onClick={() => { setShowRegistro(true); setShowLogin(false); }}>Registrarse</button>
               </span>
             </section>
           </form>
@@ -154,15 +148,16 @@ function App() {
             <h2>Información privada</h2>
             <button onClick={info}>Ver información</button>
             <button onClick={logout}>Cerrar sesión</button>
-            {contacto ? (
-              <Editar contacto={contacto} alActualizar={actualizar} />
-            ) : (
-              <Listar contactos={contactos} alAgregar={agregar} alBorrar={borrar} />
-            )}
+
           </div>
         )}
         <pre>{mensaje}</pre>
       </main>
+      {contacto ? (
+        <Editar contacto={contacto} alActualizar={actualizar} />
+      ) : (
+        <Listar contactos={contactos} alAgregar={agregar} alBorrar={borrar} />
+      )}
     </div>
   );
 }
