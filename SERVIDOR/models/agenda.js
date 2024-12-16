@@ -6,18 +6,20 @@ let contactos = null;
 
 async function cargarDatos() {
     const cantidad = await contactos.countDocuments();
-    if(cantidad == 0) {
+    if (cantidad == 0) {
         await contactos.insertMany([
-            {nombre: 'Juan',  apellido: 'Perez',    telefono: '11111111'},
-            {nombre: 'Maria', apellido: 'Gomez',    telefono: '22222222'},
-            {nombre: 'Pedro', apellido: 'Gonzalez', telefono: '33333333'},
-            {nombre: 'Ana',   apellido: 'Lopez',    telefono: '44444444'},
-            {nombre: 'Luis',  apellido: 'Martinez', telefono: '55555555'}
+            { nombre: 'Juan', apellido: 'Perez', empresa: '', domicilio: '', telefono: '11111111', email: '', propetiario: '', es_publico: '', es_visible: '', contraseña },
+            { nombre: 'Maria', apellido: 'Gomez', empresa: '', domicilio: '', telefono: '22222222', email: '', propetiario: '', es_publico: '', es_visible: '', contraseña: '' },
+            { nombre: 'Pedro', apellido: 'Lopez', empresa: '', domicilio: '', telefono: '33333333', email: '', propetiario: '', es_publico: '', es_visible: '', contraseña: '' },
+            { nombre: 'Ana', apellido: 'Martinez', empresa: '', domicilio: '', telefono: '44444444', email: '', propetiario: '', es_publico: '', es_visible: '', contraseña: '' },
+            { nombre: 'Luis', apellido: 'Gonzalez', empresa: '', domicilio: '', telefono: '55555555', email: '', propetiario: '', es_publico: '', es_visible: '', contraseña: '' },
+            { nombre: 'Carla', apellido: 'Rodriguez', empresa: '', domicilio: '', telefono: '66666666', email: '', propetiario: '', es_publico: '', es_visible: '', contraseña: '' }
+
         ])
     }
 }
 async function conectar() {
-    if(contactos !== null) return;
+    if (contactos !== null) return;
     await cliente.connect();
     const db = cliente.db('agenda');
     contactos = db.collection('contactos');
@@ -26,7 +28,7 @@ async function conectar() {
 
 async function leerTodo() {
     await conectar();
-    return await contactos.find({}).sort({apellido: 1, nombre: 1}).toArray();
+    return await contactos.find({}).sort({ apellido: 1, nombre: 1 }).toArray();
 }
 
 async function crear(contacto) {
@@ -36,7 +38,7 @@ async function crear(contacto) {
 
 async function borrar(id) {
     await conectar();
-    await contactos.deleteOne({_id: new ObjectId(id)});
+    await contactos.deleteOne({ _id: new ObjectId(id) });
 }
 
 export default { leerTodo, crear, borrar }

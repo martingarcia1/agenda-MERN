@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Datos from './Datos'
-import Editar from './Editar'
-import Listar from './Listar'
+import Editar from './components/Editar'
+import Listar from './components/Listar'
 
 function App() {
   const [contacto, setContacto] = useState(null)
