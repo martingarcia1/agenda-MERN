@@ -1,35 +1,36 @@
 import { useState } from "react";
 /* eslint-disable react/prop-types */
 function RegisterForm({ onRegister, onCancel }) {
-    const [name, setName] = useState("");
+    const [user, setUser] = useState("");
     const [password, setPassword] = useState("");
 
-    function handleSubmit(e) {
+    function registro(e) {
         e.preventDefault();
         e.stopPropagation();
 
-        if (name && password) {
-            onRegister({ name, password });
+        if (user && password) {
+            onRegister({ user, password });
         } else {
             alert("Todos los campos son obligatorios")
         }
     }
+    
 
     function handleCancel(e) {
         e.preventDefault();
         e.stopPropagation();
-        setName("");
+        setUser("");
         setPassword("");
         onCancel();
     }
     return (
         <div className="modal">
             <div className="content">
-                <h2>Register</h2>
-                <form onSubmit={handleSubmit} >
+                <h2>Registro</h2>
+                <form onSubmit={registro} >
                     <div>
                         <label>Crear Nombre de Usuario</label>
-                        <input type="text" placeholder="Usuario" value={name} onChange={(e) => setName(e.target.value)} />
+                        <input type="text" placeholder="Usuario" value={user} onChange={(e) => setUser(e.target.value)} />
                         <label>Contraseña</label>
                         <input type="password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} />
                     </div>

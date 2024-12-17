@@ -1,15 +1,13 @@
 import { useState } from "react";
 /* eslint-disable react/prop-types */
 function LoginForm({ onLogin, onCancel }) {
-    const [name, setName] = useState("");
+    const [user, setUser] = useState("");
     const [password, setPassword] = useState("");
 
-    function handleSubmit(e) {
+    function login(e) {
         e.preventDefault();
-        e.stopPropagation();
-
-        if (name && password) {
-            onLogin({ name, password });
+        if (user && password) {
+            onLogin({ user, password });
         } else {
             alert("Todos los campos son obligatorios");
         }
@@ -18,7 +16,7 @@ function LoginForm({ onLogin, onCancel }) {
     function handleCancel(e) {
         e.preventDefault();
         e.stopPropagation();
-        setName("");
+        setUser("");
         setPassword("");
         onCancel();
     }
@@ -27,11 +25,11 @@ function LoginForm({ onLogin, onCancel }) {
         <div className="modal">
             <div className="content">
                 <h2>Login</h2>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={login}>
                     <div>
-                        <label>Name</label>
-                        <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-                        <label>Password</label>
+                        <label>Nombre de Usuario</label>
+                        <input type="text" value={user} onChange={(e) => setUser(e.target.value)} />
+                        <label>Contraseña</label>
                         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                     </div>
                     <span> 

@@ -6,12 +6,17 @@ import Agenda from './routers/agenda.js';
 
 const app = express();
 
+app.use(
+  cors({
+    origin: 'http://localhost:5173',  // Permitir solo solicitudes desde el frontend
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],  // Métodos permitidos
+    credentials: true,  // Permitir cookies (credenciales)
+  })
+);
 app.use(morgan("dev"))
 app.use(cookieParser())
 app.use(express.json());
 app.use(express.static("public"))
-app.use(cors());
-
 app.use("/contactos", Agenda)
 
 let usuarios = []
@@ -70,8 +75,17 @@ app.put('/logout', validacion, (req, res) => {
   delete usuario.token
   res.clearCookie('token')
   res.json('Sesion Cerrada')
-}) 
+})
 
+app.put('/editarUsuario', validacion, (req, res) => {
+  let { user, password } = req.body;
+  let usuario = req.usuario;
+
+  if (user) usuario.user = user;  // Actualizar nombre de usuario
+  if (password) usuario.password = password;  // Actualizar contraseña
+
+  res.json('Datos de usuario actualizados correctamente');
+});
 app.get('/privado', validacion, (req, res) => {
   res.json('Esta es una ruta privada, solo para usuarios logueados')
 })
