@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import Datos from './Datos'
 import Editar from './components/Editar'
 import Listar from './components/Listar'
+import LoginForm from './components/LoginForm'
+import RegisterForm from './components/RegisterForm'
 
 function App() {
   const [contacto, setContacto] = useState(null)
@@ -30,7 +32,6 @@ function App() {
     if (res.ok) {
       setUser('');
       setPassword('');
-      setShowLogin(true);
       setShowRegistro(false);
     }
   }
@@ -100,6 +101,11 @@ function App() {
     setContactos(contactos.filter(c => c._id !== contacto._id))
   }
 
+  async function cancelar(){
+    setShowRegistro(false);
+    setShowLogin(false);
+  }
+
   return (
     <div>
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', backgroundColor: '#fff', borderBottom: '1px solid #ccc' }}>
@@ -111,37 +117,9 @@ function App() {
       </header>
 
       <main>
-        {showRegistro && (
-          <form>
-            <h2>Registro</h2>
-            <section>
-              <label>Crear Nombre de Usuario</label>
-              <input type="text" placeholder="Usuario" value={user} onChange={(e) => setUser(e.target.value)} />
-              <label>Contraseña</label>
-              <input type="password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} />
-              <span>
-                <button type="button" onClick={registro}>Registrarse</button>
-                <button type="button" onClick={() => { setShowRegistro(false); setShowLogin(true); }}>Ya tengo cuenta</button>
-              </span>
-            </section>
-          </form>
-        )}
+        {showRegistro && (<RegisterForm onRegister={registro} onCancel={cancelar}/>)}
 
-        {showLogin && (
-          <form>
-            <h2>Login</h2>
-            <section>
-              <label>Nombre de Usuario</label>
-              <input type="text" placeholder="Usuario" value={loginUser} onChange={(e) => setLoginUser(e.target.value)} />
-              <label>Contraseña</label>
-              <input type="password" placeholder="Contraseña" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} />
-              <span>
-                <button type="button" onClick={login}>Iniciar sesión</button>
-                <button type="button" onClick={() => { setShowRegistro(true); setShowLogin(false); }}>Registrarse</button>
-              </span>
-            </section>
-          </form>
-        )}
+        {showLogin && (<LoginForm onLogin={login} onCancel={cancelar}/>)}
 
         {showInfo && (
           <div>
@@ -158,6 +136,7 @@ function App() {
       ) : (
         <Listar contactos={contactos} alAgregar={agregar} alBorrar={borrar} />
       )}
+      
     </div>
   );
 }
