@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import Datos from './Datos'
 import Editar from './components/Editar'
 import Listar from './components/Listar'
-import LoginForm from './components/LoginForm'
-import RegisterForm from './components/RegisterForm'
+import LoginForm from './pages/LoginPage'
+import RegisterForm from './pages/RegisterPage'
 
 function App() {
   const [contacto, setContacto] = useState(null)
@@ -180,6 +180,8 @@ function App() {
                 <button type="button" onClick={cancelarEdicion}>Cancelar</button>
               </div>
             </form>
+
+            
           </div>
         )}
         <pre>{mensaje}</pre>
