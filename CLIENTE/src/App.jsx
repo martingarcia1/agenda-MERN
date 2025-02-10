@@ -1,135 +1,127 @@
-import React, { useState, useEffect } from 'react'
-import Datos from './Datos'
-import Editar from './components/Editar'
-import Listar from './components/Listar'
-import LoginForm from './pages/LoginPage'
-import RegisterForm from './pages/RegisterPage'
+import React, { useState, useEffect } from "react";
+import Datos from "./Datos";
+import Editar from "./components/Editar";
+import Listar from "./components/Listar";
+import LoginForm from "./pages/LoginPage";
+import RegisterForm from "./pages/RegisterPage";
+import Header from "./components/Header";
 
 function App() {
-  const [contacto, setContacto] = useState(null)
-  const [contactos, setContactos] = useState([])
-  let [mensaje, setMensaje] = React.useState('')
-  let [user, setUser] = React.useState('')
-  let [password, setPassword] = React.useState('')
-  let [showRegistro, setShowRegistro] = React.useState(false)
-  let [showLogin, setShowLogin] = React.useState(false)
-  let [showInfo, setShowInfo] = React.useState(false)
-  let [showForm, setShowForm] = React.useState(true)
-  let [loginUser, setLoginUser] = React.useState('')
-  let [loginPassword, setLoginPassword] = React.useState('')
+  const [contacto, setContacto] = useState(null);
+  const [contactos, setContactos] = useState([]);
+  const [mensaje, setMensaje] = useState("");
+  const [userData, setUserData] = useState({});
   const [loggedInUser, setLoggedInUser] = useState(null);
-  const [editar, setEditar] = useState(false)
-  const [userData, setUserData] = useState({})
+  const [editar, setEditar] = useState(false);
+  const [showRegistro, setShowRegistro] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
+  const [showForm, setShowForm] = useState(true);
 
-
+  // REGISTRO DE USUARIO
   async function registro(datos) {
-    const { user, password } = datos
-    let res = await fetch('http://localhost:3000/registro', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ user, password })
+    let res = await fetch("http://localhost:3000/registro", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(datos),
     });
 
-    let data = await res.text()
-    setMensaje(data)
+    let data = await res.text();
+    setMensaje(data);
 
     if (res.ok) {
-      setUser('');
-      setPassword('');
       setShowRegistro(false);
     }
   }
 
+  // LOGIN
   async function login(datos) {
-    const { user, password } = datos
-    let res = await fetch('http://localhost:3000/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ user, password })
+    let res = await fetch("http://localhost:3000/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(datos),
     });
+
     let data = await res.text();
-    setMensaje(data.mensaje)
+    setMensaje(data);
+
     if (res.ok) {
-      setLoggedInUser(user)
+      setLoggedInUser(datos.user);
       setShowLogin(false);
       setShowInfo(true);
       setShowForm(false);
-      setUserData({ user });
+      setUserData(datos);
     }
-
   }
 
-  async function info() {
-    let res = await fetch('/privado', {
-      method: 'GET',
-      credentials: 'include',
-    })
-    let data = await res.text();
-    setMensaje(data)
-  }
-
+  // LOGOUT
   async function logout() {
-    let res = await fetch('http://localhost:3000/logout', {
-      method: 'PUT',
-      credentials: 'include',
+    let res = await fetch("http://localhost:3000/logout", {
+      method: "PUT",
+      credentials: "include",
     });
+
     let data = await res.text();
-    setMensaje(data.mensaje);
+    setMensaje(data);
     setLoggedInUser(null);
     setShowInfo(false);
     setShowLogin(true);
     setShowForm(true);
   }
 
+  // EDITAR USUARIO
   async function editarUsuario(datos) {
-
-    let res = await fetch('http://localhost:3000/editarUsuario', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+    let res = await fetch("http://localhost:3000/editarUsuario", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ...userData, ...datos }),
     });
+
     let data = await res.text();
     setMensaje(data);
+
     if (res.ok) {
       setLoggedInUser(userData.user);
-      setEditar(false)
+      setEditar(false);
     }
   }
-  const cancelarEdicion = () => {
-    setEditar(true)
-  }
+
+  // CANCELAR EDICIÓN
+  const cancelarEdicion = () => setEditar(true);
+
+  // CARGAR CONTACTOS
   async function cargar() {
-    let lista = await Datos.listar()
-    setContactos(lista)
+    let lista = await Datos.listar();
+    setContactos(lista);
   }
-  useEffect(() => { cargar() }, [])
+
+  useEffect(() => { cargar(); }, []);
+
+  // ACTUALIZAR CONTACTO
   async function actualizar(contacto) {
     if (contacto) {
       if (contacto._id) {
         //await Datos.editar(contacto)
       } else {
-        await Datos.agregar(contacto)
+        await Datos.agregar(contacto);
       }
-      cargar()
+      cargar();
     }
-    setContacto(null)
+    setContacto(null);
   }
 
+  // AGREGAR CONTACTO
   async function agregar(contacto) {
-    setContacto(contacto)
+    setContacto(contacto);
   }
 
+  // BORRAR CONTACTO
   async function borrar(contacto) {
-    await Datos.borrar(contacto._id)
-    setContactos(contactos.filter(c => c._id !== contacto._id))
+    await Datos.borrar(contacto._id);
+    setContactos(contactos.filter((c) => c._id !== contacto._id));
   }
 
+  // CANCELAR FORMULARIO
   async function cancelar() {
     setShowRegistro(false);
     setShowLogin(false);
@@ -137,26 +129,15 @@ function App() {
 
   return (
     <div>
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', backgroundColor: '#fff', borderBottom: '1px solid #ccc' }}>
-        <h1 style={{ margin: 0 }}>AgendaPro</h1>
-        <div>
-          {loggedInUser ? (
-            <>
-              <span>{loggedInUser}</span>
-              <button onClick={logout}>Salir</button>
-            </>
-          ) : (
-            <>
-              <button onClick={() => { setShowRegistro(true); setShowLogin(false); }}>Registrar</button>
-              <button onClick={() => { setShowRegistro(false); setShowLogin(true); }}>Ingresar</button>
-            </>
-          )}
-        </div>
-      </header>
+      <Header 
+        loggedInUser={loggedInUser} 
+        logout={logout} 
+        setShowRegistro={setShowRegistro}
+        setShowLogin={setShowLogin} 
+      />
 
       <main>
         {showRegistro && (<RegisterForm onRegister={registro} onCancel={cancelar} />)}
-
         {showLogin && (<LoginForm onLogin={login} onCancel={cancelar} />)}
 
         {editar && (
@@ -180,20 +161,19 @@ function App() {
                 <button type="button" onClick={cancelarEdicion}>Cancelar</button>
               </div>
             </form>
-
-            
           </div>
         )}
+
         <pre>{mensaje}</pre>
       </main>
+
       {contacto ? (
         <Editar contacto={contacto} alActualizar={actualizar} />
       ) : (
         <Listar contactos={contactos} alAgregar={agregar} alBorrar={borrar} />
       )}
-
     </div>
   );
 }
 
-export default App
+export default App;
