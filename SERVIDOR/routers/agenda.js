@@ -7,7 +7,7 @@ router.get('/', Agenda.listar);
 router.post('/', Agenda.crear);
 router.delete('/:id', Agenda.borrar);
 
-//router.get('/:id', Agenda.leer);
-//router.put('/:id', Agenda.actualizar)
+router.get('/:id', Agenda.leer);
+router.put('/:id', Agenda.actualizar)
 
 export default router

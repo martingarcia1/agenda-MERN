@@ -81,8 +81,8 @@ app.put('/editarUsuario', validacion, (req, res) => {
   let { user, password } = req.body;
   let usuario = req.usuario;
 
-  if (user) usuario.user = user;  // Actualizar nombre de usuario
-  if (password) usuario.password = password;  // Actualizar contraseña
+  if (user) usuario.user = user;  
+  if (password) usuario.password = password;
 
   res.json('Datos de usuario actualizados correctamente');
 });

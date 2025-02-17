@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import Datos from "./Datos";
 import Editar from "./components/Editar";
 import Listar from "./components/Listar";
-import LoginForm from "./pages/LoginPage";
-import RegisterForm from "./pages/RegisterPage";
+import LoginForm from "./components/auth/LoginPage";
+import RegisterForm from "./components/auth/RegisterPage";
 import Header from "./components/Header";
 
 function App() {

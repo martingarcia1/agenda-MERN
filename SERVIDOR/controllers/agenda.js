@@ -28,8 +28,29 @@ async function borrar(req, res) {
     }
 }
 
-//asyc function leer(req, res){}
-//asyc function actualizar(req, res) {}
+async function leer(req, res){
+    try {
+        const id = req.params.id;
+        const contacto = await Datos.buscarPorId(id);
+        if (contacto) {
+            res.json(contacto);
+        } else {
+            res.status(404).json({ error: 'Contacto no encontrado' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Error al obtener el contacto' });
+    }
+}
+async function actualizar(req, res) {   
+    try {
+        const id = req.params.id;
+        const contacto = req.body;
+        await Datos.actualizar(id, contacto);
+        res.json({ mensaje: 'Contacto actualizado' });
+    } catch (error) {
+        res.status(500).json({ error: 'Error al actualizar el contacto' });
+    }
+}
 
 
-export default {listar,crear, borrar};
+export default {listar,crear, borrar, leer, actualizar};
