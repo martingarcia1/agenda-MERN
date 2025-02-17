@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Datos from "./Datos";
-import Editar from "./components/Editar";
+import Editar from "./components/agregarConta";
 import Listar from "./components/Listar";
 import LoginForm from "./components/auth/LoginPage";
 import RegisterForm from "./components/auth/RegisterPage";
@@ -140,7 +140,7 @@ function App() {
         {showRegistro && (<RegisterForm onRegister={registro} onCancel={cancelar} />)}
         {showLogin && (<LoginForm onLogin={login} onCancel={cancelar} />)}
 
-        {editar && (
+        {editar /* && (
           <div>
             <h2>Editar Usuario</h2>
             <form onSubmit={(e) => { e.preventDefault(); editarUsuario(userData); }}>
@@ -162,7 +162,7 @@ function App() {
               </div>
             </form>
           </div>
-        )}
+        )} */}
 
         <pre>{mensaje}</pre>
       </main>

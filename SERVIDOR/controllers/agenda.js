@@ -52,5 +52,15 @@ async function actualizar(req, res) {
     }
 }
 
+async function editar(req, res) {
+    try {
+        const id = req.params.id;
+        const contacto = req.body;
+        await Datos.editar(id, contacto);
+        res.json({ mensaje: 'Contacto actualizado' });
+    } catch (error) {
+        res.status(500).json({ error: 'Error al actualizar el contacto' });
+    }
+}
 
 export default {listar,crear, borrar, leer, actualizar};

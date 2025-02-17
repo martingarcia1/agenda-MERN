@@ -1,18 +1,24 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
-function Editar({ contacto, alActualizar, esAdmin = false }) {
+function Agrega({ contacto, alActualizar, esAdmin = false }) {
     const [datos, setDatos] = useState({
-        nombre: contacto?.nombre || '',
-        apellido: contacto?.apellido || '',
-        empresa: contacto?.empresa || '',
-        domicilio: contacto?.domicilio || '',
-        telefono: contacto?.telefono || '',
-        email: contacto?.email || '',
-        es_publico: contacto?.es_publico || false,
-        es_visible: contacto?.es_visible || true
+        nombre: '',
+        apellido: '',
+        empresa: '',
+        domicilio: '',
+        telefono: '',
+        email: '',
+        es_publico: false,
+        es_visible: true
     })
 
     const [errores, setErrores] = useState({})
+
+    useEffect(() => {
+        if (contacto) {
+            setDatos(contacto)
+        }
+    }, [contacto])
 
     function cambiar(e) {
         const { name, value, type, checked } = e.target
@@ -55,7 +61,7 @@ function Editar({ contacto, alActualizar, esAdmin = false }) {
         alActualizar(null)
     }
 
-    async function guardar(e) {
+    function guardar(e) {
         e.preventDefault()
         e.stopPropagation()
         if (validar()) {
@@ -192,4 +198,4 @@ function Editar({ contacto, alActualizar, esAdmin = false }) {
     )
 }
 
-export default Editar;
+export default Agrega;

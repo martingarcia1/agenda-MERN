@@ -54,10 +54,22 @@ async function buscarPorId(id) {
     return await contactos.findOne({ _id: new ObjectId(id) });
 }
 
+async function editar(id, contacto) {
+    await conectar();
+    return await contactos.updateOne(
+        { _id: new ObjectId(id) },
+        { $set: contacto }
+    );
+}
+// async function desconectar() {
+//     await cliente.close();
+// }
+
 export default {
     leerTodo,
     crear,
     borrar,
     actualizar,
-    buscarPorId
+    buscarPorId,
+    editar
 };
