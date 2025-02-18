@@ -1,8 +1,9 @@
 /* eslint-disable react/prop-types */
 
 import Agrega from "./agregarConta"
-
+import { useEffect, useState } from "react"
 function Listar({ contactos, alAgregar, alBorrar }) {
+    const [isAdmin, setIsAdmin] = useState(false)
     function agregar() {
         alAgregar({ nombre: "", apellido: "", telefono: "", empresa: "", domicilio: "", email: "", propietario: "", es_publico: false, es_visible: true, contraseña: "" })
     }
@@ -10,6 +11,12 @@ function Listar({ contactos, alAgregar, alBorrar }) {
     function editar(contacto) {
         alAgregar(contacto)
     }
+
+    useEffect(() => {
+        setIsAdmin(true)
+    }, [])
+
+
 
     const contactosOrdenados = contactos.sort((a, b) => a.apellido.localeCompare(b.apellido))
 

@@ -3,6 +3,7 @@ import { useState } from "react";
 function LoginForm({ onLogin, onCancel }) {
     const [user, setUser] = useState("");
     const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("");
 
     function login(e) {
         e.preventDefault();
@@ -31,6 +32,8 @@ function LoginForm({ onLogin, onCancel }) {
                         <input type="text" value={user} onChange={(e) => setUser(e.target.value)} />
                         <label>Contraseña</label>
                         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                        <label>Correo Electrónico</label>
+                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                     </div>
                     <span> 
                         <button type="submit" className="buttons">Login</button>

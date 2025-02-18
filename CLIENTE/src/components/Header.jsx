@@ -1,6 +1,6 @@
 import React from "react";
 
-function Header({ loggedInUser, logout, setShowRegistro, setShowLogin }) {
+function Header({ loggedInUser, logout, setShowRegistro, setShowLogin, setShowProfile }) {
   return (
     <header
       style={{
@@ -16,8 +16,10 @@ function Header({ loggedInUser, logout, setShowRegistro, setShowLogin }) {
       <div>
         {loggedInUser ? (
           <>
-            <span>{loggedInUser}</span>
-            <button onClick={logout}>Salir</button>
+            <button onClick={() => setShowProfile((prev) => !prev)} className="user-name-button">
+              {loggedInUser}
+            </button>
+            <button onClick={logout}>Cerrar sesión</button>
           </>
         ) : (
           <>

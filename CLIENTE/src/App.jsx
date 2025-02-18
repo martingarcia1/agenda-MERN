@@ -5,6 +5,7 @@ import Listar from "./components/Listar";
 import LoginForm from "./components/auth/LoginPage";
 import RegisterForm from "./components/auth/RegisterPage";
 import Header from "./components/Header";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   const [contacto, setContacto] = useState(null);
@@ -17,8 +18,15 @@ function App() {
   const [showLogin, setShowLogin] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
   const [showForm, setShowForm] = useState(true);
+  const [showProfile, setShowProfile] = useState(false); // Nuevo estado para ProfilePage
 
-  // REGISTRO DE USUARIO
+  useEffect(() => {
+    const usuario = localStorage.getItem("usuario");
+    if (usuario) {
+      setLoggedInUser(usuario);
+    }
+  }, []);
+
   async function registro(datos) {
     let res = await fetch("http://localhost:3000/registro", {
       method: "POST",
@@ -34,7 +42,6 @@ function App() {
     }
   }
 
-  // LOGIN
   async function login(datos) {
     let res = await fetch("http://localhost:3000/login", {
       method: "POST",
@@ -47,6 +54,7 @@ function App() {
 
     if (res.ok) {
       setLoggedInUser(datos.user);
+      localStorage.setItem("usuario", datos.user);
       setShowLogin(false);
       setShowInfo(true);
       setShowForm(false);
@@ -54,7 +62,6 @@ function App() {
     }
   }
 
-  // LOGOUT
   async function logout() {
     let res = await fetch("http://localhost:3000/logout", {
       method: "PUT",
@@ -64,44 +71,28 @@ function App() {
     let data = await res.text();
     setMensaje(data);
     setLoggedInUser(null);
+    localStorage.removeItem("usuario");
     setShowInfo(false);
     setShowLogin(true);
     setShowForm(true);
+    setShowProfile(false); // Ocultar perfil al cerrar sesión
   }
 
-  // EDITAR USUARIO
-  async function editarUsuario(datos) {
-    let res = await fetch("http://localhost:3000/editarUsuario", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...userData, ...datos }),
-    });
-
-    let data = await res.text();
-    setMensaje(data);
-
-    if (res.ok) {
-      setLoggedInUser(userData.user);
-      setEditar(false);
-    }
-  }
-
-  // CANCELAR EDICIÓN
   const cancelarEdicion = () => setEditar(true);
 
-  // CARGAR CONTACTOS
   async function cargar() {
     let lista = await Datos.listar();
     setContactos(lista);
   }
 
-  useEffect(() => { cargar(); }, []);
+  useEffect(() => {
+    cargar();
+  }, []);
 
-  // ACTUALIZAR CONTACTO
   async function actualizar(contacto) {
     if (contacto) {
       if (contacto._id) {
-        //await Datos.editar(contacto)
+        // await Datos.editar(contacto);
       } else {
         await Datos.agregar(contacto);
       }
@@ -110,18 +101,15 @@ function App() {
     setContacto(null);
   }
 
-  // AGREGAR CONTACTO
   async function agregar(contacto) {
     setContacto(contacto);
   }
 
-  // BORRAR CONTACTO
   async function borrar(contacto) {
     await Datos.borrar(contacto._id);
     setContactos(contactos.filter((c) => c._id !== contacto._id));
   }
 
-  // CANCELAR FORMULARIO
   async function cancelar() {
     setShowRegistro(false);
     setShowLogin(false);
@@ -129,41 +117,24 @@ function App() {
 
   return (
     <div>
-      <Header 
-        loggedInUser={loggedInUser} 
-        logout={logout} 
+      <Header
+        loggedInUser={loggedInUser}
+        logout={logout}
         setShowRegistro={setShowRegistro}
-        setShowLogin={setShowLogin} 
+        setShowLogin={setShowLogin}
+        setShowProfile={setShowProfile}
       />
 
       <main>
-        {showRegistro && (<RegisterForm onRegister={registro} onCancel={cancelar} />)}
-        {showLogin && (<LoginForm onLogin={login} onCancel={cancelar} />)}
-
-        {editar /* && (
-          <div>
-            <h2>Editar Usuario</h2>
-            <form onSubmit={(e) => { e.preventDefault(); editarUsuario(userData); }}>
-              <label>Usuario:</label>
-              <input
-                type="text"
-                value={userData.user}
-                onChange={(e) => setUserData({ ...userData, user: e.target.value })}
-              />
-              <label>Contraseña:</label>
-              <input
-                type="password"
-                value={userData.password}
-                onChange={(e) => setUserData({ ...userData, password: e.target.value })}
-              />
-              <div>
-                <button type="submit">Guardar</button>
-                <button type="button" onClick={cancelarEdicion}>Cancelar</button>
-              </div>
-            </form>
-          </div>
-        )} */}
-
+        {showProfile ? (
+          <ProfilePage />
+        ) : (
+        <>
+          {showRegistro && <RegisterForm onRegister={registro} onCancel={cancelar} />}
+          {showLogin && <LoginForm onLogin={login} onCancel={cancelar} />}
+          <Listar contactos={contactos} alAgregar={agregar} alBorrar={borrar} />
+        </>
+        )}
         <pre>{mensaje}</pre>
       </main>
 

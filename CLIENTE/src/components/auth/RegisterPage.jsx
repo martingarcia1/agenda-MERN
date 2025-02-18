@@ -3,6 +3,7 @@ import { useState } from "react";
 function RegisterForm({ onRegister, onCancel }) {
     const [user, setUser] = useState("");
     const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("");
 
     function registro(e) {
         e.preventDefault();
@@ -33,6 +34,8 @@ function RegisterForm({ onRegister, onCancel }) {
                         <input type="text" placeholder="Usuario" value={user} onChange={(e) => setUser(e.target.value)} />
                         <label>Contraseña</label>
                         <input type="password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} />
+                        <label>Correo Electrónico</label>
+                        <input type="email" placeholder="Correo Electrónico" value={email} onChange={(e) => setEmail(e.target.value)} />
                     </div>
                     <span>
                         <button type="submit" className="buttons">Registrarse</button>

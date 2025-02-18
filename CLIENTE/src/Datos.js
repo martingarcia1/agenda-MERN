@@ -24,4 +24,24 @@ async function borrar(id) {
     return await llamar(`/contactos/${id}`, "DELETE")
 }
 
-export default { listar, agregar, borrar }
+async function editar(id, datos) {
+    return await llamar(`/contactos/${id}`, "PUT", datos)
+}
+
+async function leer(id) {
+    return await llamar(`/contactos/${id}`)
+}
+
+async function actualizar(id, datos) {
+    return await llamar(`/contactos/${id}`, "PUT", datos)
+}
+
+async function buscar(id) {
+    return await llamar(`/contactos/${id}`)
+}
+
+async function es_visible(id) {
+    return await llamar(`/contactos/${id}`, "PUT")
+}
+
+export default { listar, agregar, borrar, editar, leer, actualizar, buscar, es_visible };
