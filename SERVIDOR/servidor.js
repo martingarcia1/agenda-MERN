@@ -8,16 +8,14 @@ import { conectar, contactos } from './models/agenda.js';
 
 
 const { listar, cambiarPrivacidad, cambiarVisibilidad } = agenda;
-// import { listar, cambiarPrivacidad, cambiarVisibilidad } from './models/agenda.js';
-// import {listar, cambiarPrivacidad, cambiarVisibilidad} from './controllers/agenda.js';
 
 const app = express();
 
 app.use(
   cors({
-    origin: 'http://localhost:5173',  // Permitir solo solicitudes desde el frontend
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],  // Métodos permitidos
-    credentials: true,  // Permitir cookies (credenciales)
+    origin: 'http://localhost:5173',  
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],  
+    credentials: true,  
   })
 );
 app.use(morgan("dev"))

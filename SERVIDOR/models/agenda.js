@@ -124,9 +124,6 @@ async function editar(id, contacto) {
         { $set: contacto }
     );
 }
-// async function desconectar() {
-//     await cliente.close();
-// }
 
 export default {
     leerTodo,

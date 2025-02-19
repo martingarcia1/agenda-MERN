@@ -18,7 +18,7 @@ function App() {
   const [showLogin, setShowLogin] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
   const [showForm, setShowForm] = useState(true);
-  const [showProfile, setShowProfile] = useState(false); // Nuevo estado para ProfilePage
+  const [showProfile, setShowProfile] = useState(false); 
 
   useEffect(() => {
     const usuario = localStorage.getItem("usuario");
@@ -81,7 +81,7 @@ function App() {
     setShowInfo(false);
     setShowLogin(true);
     setShowForm(true);
-    setShowProfile(false); // Ocultar perfil al cerrar sesión
+    setShowProfile(false); 
   }
 
   const cancelarEdicion = () => setEditar(true);
