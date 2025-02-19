@@ -19,7 +19,7 @@ function Header({ loggedInUser, logout, setShowRegistro, setShowLogin, setShowPr
             <button onClick={() => setShowProfile((prev) => !prev)} className="user-name-button">
               {loggedInUser}
             </button>
-            <button onClick={logout}>Cerrar sesión</button>
+            <button onClick={logout}>Salir</button>
           </>
         ) : (
           <>

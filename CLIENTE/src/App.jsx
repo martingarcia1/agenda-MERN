@@ -67,6 +67,12 @@ function App() {
       method: "PUT",
       credentials: "include",
     });
+    if (res.ok) {
+      localStorage.removeItem("usuario");
+      window.location.reload();
+    } else {
+      alert("Error al cerrar sesión");
+    }
 
     let data = await res.text();
     setMensaje(data);
@@ -92,7 +98,7 @@ function App() {
   async function actualizar(contacto) {
     if (contacto) {
       if (contacto._id) {
-        // await Datos.editar(contacto);
+        await Datos.editar(contacto);
       } else {
         await Datos.agregar(contacto);
       }
@@ -127,24 +133,24 @@ function App() {
 
       <main>
         {showProfile ? (
-          <ProfilePage />
+          <ProfilePage setShowProfile={setShowProfile} />
         ) : (
-        <>
-          {showRegistro && <RegisterForm onRegister={registro} onCancel={cancelar} />}
-          {showLogin && <LoginForm onLogin={login} onCancel={cancelar} />}
-          <Listar contactos={contactos} alAgregar={agregar} alBorrar={borrar} />
-        </>
+          <>
+            {showRegistro && <RegisterForm onRegister={registro} onCancel={cancelar} />}
+            {showLogin && <LoginForm onLogin={login} onCancel={cancelar} />}
+            {contacto ? (
+              <Editar contacto={contacto} alActualizar={actualizar} />
+            ) : (
+              <Listar contactos={contactos} alAgregar={agregar} alBorrar={borrar} />
+            )}
+          </>
         )}
-        <pre>{mensaje}</pre>
       </main>
 
-      {contacto ? (
-        <Editar contacto={contacto} alActualizar={actualizar} />
-      ) : (
-        <Listar contactos={contactos} alAgregar={agregar} alBorrar={borrar} />
-      )}
+      <pre>{mensaje}</pre>
     </div>
   );
+
 }
 
 export default App;

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import LoginForm from "../components/auth/LoginPage";
 
-function ProfilePage() {
+function ProfilePage({ setShowProfile }) {
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
@@ -18,9 +18,9 @@ function ProfilePage() {
     async function updateUser(data) {
         let res = await fetch("http://localhost:3000/editarUsuario", {
             method: "PUT",
+            credentials: "include",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data),
-            credentials: "include"
+            body: JSON.stringify({ user: data.name, password: data.password, email: data.email })
         });
 
         let response = await res.text();
@@ -40,14 +40,14 @@ function ProfilePage() {
 
     function handleCancel(e) {
         e.preventDefault();
-        setShowForm(false);
+        setShowProfile(false);
+
     }
 
     return (
         <div>
             <h1>Perfil de Usuario</h1>
 
-            {/* Si showForm es false, mostrar el botón para editar */}
             {!showForm ? (
                 <button onClick={() => setShowForm(true)} className="buttons">Editar Perfil</button>
             ) : (
@@ -61,7 +61,7 @@ function ProfilePage() {
                         <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                     </div>
                     <span>
-                        <button type="submit" className="buttons">Actualizar</button>
+                        <button onClick={handleUpdate} type="submit" className="buttons">Actualizar</button>
                         <button onClick={handleCancel} className="buttons">Cancelar</button>
                     </span>
                 </form>

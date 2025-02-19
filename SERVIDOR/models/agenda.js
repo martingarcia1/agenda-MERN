@@ -26,6 +26,62 @@ async function conectar() {
     await cargarDatos();
 }
 
+async function listar(req, res){
+    await conectar();
+    if(req.usuario.user === 'admin'){
+        const datos = await contactos.find({}).toArray();
+        res.json(datos);
+    }
+
+    const datos = await contactos.find({
+        $or: [
+            { propietario: req.usuario.user },
+            { es_publico: true },
+            { es_visible: true }
+        ]
+    }).toArray();
+    res.json(datos);
+}
+
+async function cambiarPrivacidad(req, res){
+    await conectar();
+    const id = req.params.id;
+    const contacto = await contactos.findOne({ _id: new ObjectId(id) });
+    if(!contacto){
+        return res.status(404).json({ error: 'Contacto no encontrado' });
+    }
+
+    if(contacto.propietario !== req.usuario.user){
+        return res.status(403).json({ error: 'No tienes permisos para modificar este contacto' });
+    }
+
+    const nuevoEstado = !contacto.es_publico;
+    await contactos.updateOne(
+        { _id: new ObjectId(id) },
+        { $set: { es_visible: !contacto.es_visible } }
+    );
+    res.json({ mensaje: 'Contacto actualizado' });
+}
+
+async function cambiarVisibilidad(req, res){
+    await conectar();
+    const id = req.params.id;
+    const contacto = await contactos.findOne({ _id: new ObjectId(id) });
+    if(!contacto){
+        return res.status(404).json({ error: 'Contacto no encontrado' });
+    }
+
+    if(req.usuario.user !== 'admin'){
+        return res.status(403).json({ error: 'No tienes permisos para modificar este contacto' });
+    }
+
+    const nuevoEstado = !contacto.es_publico;
+    await contactos.updateOne(
+        { _id: new ObjectId(id) },
+        { $set: { es_publico: nuevoEstado } }
+    );
+}
+
 async function leerTodo() {
     await conectar();
     return await contactos.find({}).sort({ apellido: 1, nombre: 1 }).toArray();
@@ -71,5 +127,8 @@ export default {
     borrar,
     actualizar,
     buscarPorId,
-    editar
+    editar,
+    listar,
+    cambiarPrivacidad,
+    cambiarVisibilidad
 };
