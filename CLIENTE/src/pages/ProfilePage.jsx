@@ -45,24 +45,24 @@ function ProfilePage({ setShowProfile }) {
     }
 
     return (
-        <div>
-            <h1>Perfil de Usuario</h1>
+        <div className="profile-conteiner">
+            <h1 className="profile-title">Perfil de Usuario</h1>
 
             {!showForm ? (
                 <button onClick={() => setShowForm(true)} className="buttons">Editar Perfil</button>
             ) : (
-                <form onSubmit={handleUpdate}>
+                <form onSubmit={handleUpdate} className="profile-form">
                     <div>
                         <label>Nombre de Usuario</label>
-                        <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+                        <input type="text" value={name} onChange={(e) => setName(e.target.value)} className="profile-input"/>
                         <label>Contraseña</label>
                         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                         <label>Correo Electrónico</label>
                         <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                     </div>
                     <span>
-                        <button onClick={handleUpdate} type="submit" className="buttons">Actualizar</button>
-                        <button onClick={handleCancel} className="buttons">Cancelar</button>
+                        <button onClick={handleUpdate} type="submit" className="profile-button">Actualizar</button>
+                        <button onClick={handleCancel} className="profile-button">Cancelar</button>
                     </span>
                 </form>
             )}

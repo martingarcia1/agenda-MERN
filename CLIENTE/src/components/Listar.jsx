@@ -2,6 +2,9 @@
 
 import Agrega from "./agregarConta"
 import { useEffect, useState } from "react"
+import Datos from "../Datos"
+import { func } from "prop-types"
+
 function Listar({ contactos, alAgregar, alBorrar }) {
     const [isAdmin, setIsAdmin] = useState(false)
     function agregar() {
@@ -15,6 +18,15 @@ function Listar({ contactos, alAgregar, alBorrar }) {
     useEffect(() => {
         setIsAdmin(true)
     }, [])
+
+    function cambiarEstadoVisibilidad(contacto){
+        Datos.cambiarEstadoVisibilidad(contacto.id, !contacto.es_visible).then(res =>{
+            if(res){
+                contactos.es_visible = res.es_visible
+                setContactos([...contactos])
+            }
+        }).catch(err => console.log(err))
+    }
 
 
 
@@ -38,6 +50,8 @@ function Listar({ contactos, alAgregar, alBorrar }) {
                     <p>{c.contraseña}</p>
                     <button onClick={() => editar(c)}><b>Editar</b></button>
                     <button onClick={() => alBorrar(c)}><b>Borrar</b></button>
+                    <button onClick={() => cambiarEstadoVisibilidad(c)}>{c.es_visible ? "Ocultar" : "Mostrar"}
+                    </button>
                 </section>
             )}
         </>

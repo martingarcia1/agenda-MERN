@@ -6,6 +6,7 @@ import Agenda from './routers/agenda.js';
 import agenda from "./models/agenda.js";
 import { conectar, contactos } from './models/agenda.js';
 
+
 const { listar, cambiarPrivacidad, cambiarVisibilidad } = agenda;
 // import { listar, cambiarPrivacidad, cambiarVisibilidad } from './models/agenda.js';
 // import {listar, cambiarPrivacidad, cambiarVisibilidad} from './controllers/agenda.js';
@@ -72,7 +73,7 @@ app.post('/registro', async(req, res) => {
   res.send('Usuario registrado correctamente');
 });
 
-app.post('/login', (req, res) => {
+app.post('/login', async(req, res) => {
   let { user, password } = req.body
   if (!user || !password) {
     return res.status(400).json({ error: 'Usuario o Contraseña invalidos' })

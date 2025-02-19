@@ -4,7 +4,7 @@ async function llamar(ruta, metodo = "GET", datos = {}) {
         method: metodo,
         headers: { 'Content-Type': 'application/json' }
     };
-    
+
     if (metodo != "GET") {
         opciones.body = JSON.stringify(datos);
     }
@@ -50,8 +50,8 @@ async function buscar(id) {
     return await llamar(`/contactos/${id}`)
 }
 
-async function es_visible(id) {
-    return await llamar(`/contactos/${id}`, "PUT")
+async function cambiarVisibilidad(id, es_visible) {
+    return await llamar(`/contactos/${id}`, "PUT", { es_visible })
 }
 
-export default { listar, agregar, borrar, editar, leer, actualizar, buscar, es_visible };
+export default { listar, agregar, borrar, editar, leer, actualizar, buscar, cambiarVisibilidad };
