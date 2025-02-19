@@ -3,12 +3,22 @@ async function llamar(ruta, metodo = "GET", datos = {}) {
     let opciones = {
         method: metodo,
         headers: { 'Content-Type': 'application/json' }
-    }
+    };
+    
     if (metodo != "GET") {
-        opciones.body = JSON.stringify(datos)
+        opciones.body = JSON.stringify(datos);
     }
-    let repuesta = await fetch(`${base}${ruta}`, opciones)
-    return await repuesta.json()
+
+    try {
+        let repuesta = await fetch(`${base}${ruta}`, opciones);
+        if (!repuesta.ok) {
+            throw new Error(`Error ${repuesta.status}: ${repuesta.statusText}`);
+        }
+        return await repuesta.json();
+    } catch (error) {
+        console.log("Error al llamar a la API", error.message);
+        return null;
+    }
 }
 
 async function listar() {

@@ -3,9 +3,12 @@ import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import cors from "cors"
 import Agenda from './routers/agenda.js';
+import agenda from "./models/agenda.js";
 import { conectar, contactos } from './models/agenda.js';
+
+const { listar, cambiarPrivacidad, cambiarVisibilidad } = agenda;
 // import { listar, cambiarPrivacidad, cambiarVisibilidad } from './models/agenda.js';
-import {listar, cambiarPrivacidad, cambiarVisibilidad} from './controllers/agenda.js';
+// import {listar, cambiarPrivacidad, cambiarVisibilidad} from './controllers/agenda.js';
 
 const app = express();
 
@@ -34,6 +37,7 @@ function validacion(req, res, next) {
   let usuario = usuarios.find(usuario => usuario.token === token)
   if (usuario) {
     req.usuario = usuario
+    console.log("Usuario validado:", usuario)
     next()
   } else {
     res.status(401).send("No estas autorizado")
@@ -50,7 +54,7 @@ app.post('/registro', async(req, res) => {
 
   let existe = usuarios.find(usuario => usuario.user === user)
   if (existe) {
-    res.status(402).json({ error: 'El usuario ya existe' })
+    return res.status(402).json({ error: 'El usuario ya existe' })
   }
   usuarios.push({ user, password })
 
@@ -90,8 +94,14 @@ app.put('/logout', validacion, (req, res) => {
   if (!req.usuario) {
     return res.status(401).send("No estas autorizado")
   }
-  let usuario = req.usuario
-  delete usuario.token
+
+  let index = usuarios.findIndex(usuario => usuario.token === req.usuario.token)
+  if(index !== -1){
+    usuarios[index].token = null
+  }
+
+  // let usuario = req.usuario
+  // delete usuario.token
   res.clearCookie('token')
   res.json('Sesion Cerrada')
 })

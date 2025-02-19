@@ -18,8 +18,10 @@ function Listar({ contactos, alAgregar, alBorrar }) {
 
 
 
-    const contactosOrdenados = contactos.sort((a, b) => a.apellido.localeCompare(b.apellido))
-
+    console.log(contactos)
+    const contactosOrdenados = Array.isArray(contactos)
+        ? [...contactos].sort((a, b) => (a.apellido || "").localeCompare(b.apellido || ""))
+        : [];
     return (
         <>
             <h1>Contactos <button onClick={agregar}>Agregar</button></h1>

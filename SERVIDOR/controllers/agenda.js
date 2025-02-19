@@ -1,10 +1,89 @@
 import Datos from '../models/agenda.js'
-async function listar(req, res) {
+import { ObjectId } from 'mongodb';
+import { conectar, contactos } from '../models/agenda.js';
+
+export async function listar(req, res) {
+    await conectar();
+    req.usuario = 'admin';
     try {
-        const datos = await Datos.leerTodo();
+        let datos;
+        console.log(req.usuario.user);
+        if (req.usuario.user === 'admin') {
+            datos = await contactos.find({}).toArray();
+        } else {
+            datos = await contactos.find({
+                $or: [
+                    { propietario: req.usuario.user },
+                    { es_publico: true },
+                    { es_visible: true }
+                ]
+            }).toArray();
+        }
         res.json(datos);
     } catch (error) {
-        res.status(500).json({ error: 'Error al obtener los datos' });
+        console.log("Error al listar los contactos", error);
+        res.status(500).json({ error: 'Error al listar los contactos' });
+    }
+}
+
+// async function listar(req, res) {
+//     try {
+//         const datos = await Datos.leerTodo();
+//         res.json(datos);
+//     } catch (error) {
+//         res.status(500).json({ error: 'Error al obtener los datos' });
+//     }
+// }
+
+export async function cambiarPrivacidad(req, res) {
+    await conectar();
+    const id = req.params.id;
+
+    try {
+        const contacto = await contactos.findOne({ _id: new ObjectId(id) });
+        if (!contacto) {
+            return res.status(404).json({ error: 'Contacto no encontrado' });
+        }
+
+        if (contacto.propietario !== req.usuario.user) {
+            return res.status(403).json({ error: 'No tienes permisos para modificar este contacto' });
+        }
+
+        const nuevoEstado = !contacto.es_publico;
+        await contactos.updateOne(
+            { _id: new ObjectId(id) },
+            { $set: { es_publico: nuevoEstado } }
+        );
+
+        res.json({ mensaje: 'Privacidad del contacto actualizada', es_publico: nuevoEstado });
+    } catch (error) {
+        res.status(500).json({ error: 'Error al cambiar la privacidad del contacto' });
+    }
+}
+
+export async function cambiarVisibilidad(req, res) {
+    await conectar();
+    const id = req.params.id;
+
+    try {
+        const contacto = await contactos.findOne({ _id: new ObjectId(id) });
+        if (!contacto) {
+            return res.status(404).json({ error: 'Contacto no encontrado' });
+        }
+
+        if (req.usuario.user !== 'admin') {
+            return res.status(403).json({ error: 'No tienes permisos para modificar este contacto' });
+        }
+
+        const nuevoEstado = !contacto.es_visible;
+        await contactos.updateOne(
+            { _id: new ObjectId(id) },
+            { $set: { es_visible: nuevoEstado } }
+        );
+
+        res.json({ mensaje: 'Visibilidad del contacto actualizada', es_visible: nuevoEstado });
+    } catch (error) {
+        res.status(500).json({ error: 'Error al cambiar la visibilidad del contacto' });
     }
 }
 
@@ -28,7 +107,7 @@ async function borrar(req, res) {
     }
 }
 
-async function leer(req, res){
+async function leer(req, res) {
     try {
         const id = req.params.id;
         const contacto = await Datos.buscarPorId(id);
@@ -41,7 +120,7 @@ async function leer(req, res){
         res.status(500).json({ error: 'Error al obtener el contacto' });
     }
 }
-async function actualizar(req, res) {   
+async function actualizar(req, res) {
     try {
         const id = req.params.id;
         const contacto = req.body;
@@ -63,4 +142,4 @@ async function editar(req, res) {
     }
 }
 
-export default {listar,crear, borrar, leer, actualizar};
+export default { listar, crear, borrar, leer, actualizar, editar, cambiarPrivacidad, cambiarVisibilidad };

@@ -6,14 +6,15 @@ let contactos = null;
 
 async function cargarDatos() {
     const cantidad = await contactos.countDocuments();
+    const contraseña = '1234';
     if (cantidad == 0) {
         await contactos.insertMany([
-            { nombre: 'Juan', apellido: 'Perez', empresa: '', domicilio: '', telefono: '11111111', email: '', propietario: '', es_publico: '', es_visible: '', contraseña },
-            { nombre: 'Maria', apellido: 'Gomez', empresa: '', domicilio: '', telefono: '22222222', email: '', propietario: '', es_publico: '', es_visible: '', contraseña: '' },
-            { nombre: 'Pedro', apellido: 'Lopez', empresa: '', domicilio: '', telefono: '33333333', email: '', propietario: '', es_publico: '', es_visible: '', contraseña: '' },
-            { nombre: 'Ana', apellido: 'Martinez', empresa: '', domicilio: '', telefono: '44444444', email: '', propietario: '', es_publico: '', es_visible: '', contraseña: '' },
-            { nombre: 'Luis', apellido: 'Gonzalez', empresa: '', domicilio: '', telefono: '55555555', email: '', propietario: '', es_publico: '', es_visible: '', contraseña: '' },
-            { nombre: 'Carla', apellido: 'Rodriguez', empresa: '', domicilio: '', telefono: '66666666', email: '', propietario: '', es_publico: '', es_visible: '', contraseña: '' }
+            { nombre: 'Juan', apellido: 'Perez', empresa: '', domicilio: '', telefono: '11111111', email: '', propietario: '', es_publico: false, es_visible: true, contraseña:'' },
+            { nombre: 'Maria', apellido: 'Gomez', empresa: '', domicilio: '', telefono: '22222222', email: '', propietario: '', es_publico: false, es_visible: true, contraseña: '' },
+            { nombre: 'Pedro', apellido: 'Lopez', empresa: '', domicilio: '', telefono: '33333333', email: '', propietario: '', es_publico: false, es_visible: true, contraseña: '' },
+            { nombre: 'Ana', apellido: 'Martinez', empresa: '', domicilio: '', telefono: '44444444', email: '', propietario: '', es_publico: false, es_visible: true, contraseña: '' },
+            { nombre: 'Luis', apellido: 'Gonzalez', empresa: '', domicilio: '', telefono: '55555555', email: '', propietario: '', es_publico: false, es_visible: true, contraseña: '' },
+            { nombre: 'Carla', apellido: 'Rodriguez', empresa: '', domicilio: '', telefono: '66666666', email: '', propietario: '', es_publico: false, es_visible: true, contraseña: '' }
 
         ])
     }
@@ -28,6 +29,11 @@ async function conectar() {
 
 async function listar(req, res){
     await conectar();
+
+    if(!req.usuario){
+        return res.status(401).json({ error: 'No estás autorizado' });
+    }
+
     if(req.usuario.user === 'admin'){
         const datos = await contactos.find({}).toArray();
         res.json(datos);
@@ -58,9 +64,9 @@ async function cambiarPrivacidad(req, res){
     const nuevoEstado = !contacto.es_publico;
     await contactos.updateOne(
         { _id: new ObjectId(id) },
-        { $set: { es_visible: !contacto.es_visible } }
+        { $set: { es_publico: nuevoEstado } }
     );
-    res.json({ mensaje: 'Contacto actualizado' });
+    res.json({ mensaje: 'Contacto actualizado', es_publico: nuevoEstado });
 }
 
 async function cambiarVisibilidad(req, res){
@@ -78,8 +84,9 @@ async function cambiarVisibilidad(req, res){
     const nuevoEstado = !contacto.es_publico;
     await contactos.updateOne(
         { _id: new ObjectId(id) },
-        { $set: { es_publico: nuevoEstado } }
+        { $set: { es_visible: nuevoEstado } }
     );
+    res.json({ mensaje: 'Contacto actualizado', es_visible: nuevoEstado })
 }
 
 async function leerTodo() {
@@ -132,3 +139,4 @@ export default {
     cambiarPrivacidad,
     cambiarVisibilidad
 };
+export { conectar, contactos };
