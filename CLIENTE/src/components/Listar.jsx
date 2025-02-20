@@ -28,7 +28,7 @@ function Listar({ contactos, alAgregar, alBorrar }) {
         <>
             <h1>Contactos <button onClick={agregar}>Agregar</button></h1>
             {contactosOrdenados.map(c =>
-                <section key={c._id}>
+                <section key={c._id} className="contacto-lista">
                     <p>{c._id}</p>
                     <p>{c.apellido} <b> {c.nombre}</b></p>
                     <p>{c.telefono}</p>

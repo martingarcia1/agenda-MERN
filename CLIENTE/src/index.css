@@ -88,6 +88,15 @@ button.text-gray {
   /* text-gray-500 */
 }
 
+.contacto-lista{
+  max-width: 400px;
+  margin: 50px auto;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
 button.text-gray:hover {
   color: #4b5563;
   /* hover:text-gray-700 */
