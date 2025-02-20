@@ -19,16 +19,6 @@ function Listar({ contactos, alAgregar, alBorrar }) {
         setIsAdmin(true)
     }, [])
 
-    function cambiarEstadoVisibilidad(contacto){
-        Datos.cambiarEstadoVisibilidad(contacto.id, !contacto.es_visible).then(res =>{
-            if(res){
-                contactos.es_visible = res.es_visible
-                setContactos([...contactos])
-            }
-        }).catch(err => console.log(err))
-    }
-
-
 
     console.log(contactos)
     const contactosOrdenados = Array.isArray(contactos)
@@ -38,7 +28,8 @@ function Listar({ contactos, alAgregar, alBorrar }) {
         <>
             <h1>Contactos <button onClick={agregar}>Agregar</button></h1>
             {contactosOrdenados.map(c =>
-                <section key={c.id}>
+                <section key={c._id}>
+                    <p>{c._id}</p>
                     <p>{c.apellido} <b> {c.nombre}</b></p>
                     <p>{c.telefono}</p>
                     <p>{c.email}</p>
@@ -50,8 +41,6 @@ function Listar({ contactos, alAgregar, alBorrar }) {
                     <p>{c.contraseña}</p>
                     <button onClick={() => editar(c)}><b>Editar</b></button>
                     <button onClick={() => alBorrar(c)}><b>Borrar</b></button>
-                    <button onClick={() => cambiarEstadoVisibilidad(c)}>{c.es_visible ? "Ocultar" : "Mostrar"}
-                    </button>
                 </section>
             )}
         </>

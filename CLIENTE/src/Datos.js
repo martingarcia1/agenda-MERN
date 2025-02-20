@@ -42,9 +42,12 @@ async function leer(id) {
     return await llamar(`/contactos/${id}`)
 }
 
-async function actualizar(id, datos) {
-    return await llamar(`/contactos/${id}`, "PUT", datos)
+
+async function actualizar(datos) {
+    return await llamar(`/contactos/${datos._id.toString()}`, "PUT", datos)
+    
 }
+
 
 async function buscar(id) {
     return await llamar(`/contactos/${id}`)

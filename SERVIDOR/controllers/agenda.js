@@ -27,15 +27,6 @@ export async function listar(req, res) {
     }
 }
 
-// async function listar(req, res) {
-//     try {
-//         const datos = await Datos.leerTodo();
-//         res.json(datos);
-//     } catch (error) {
-//         res.status(500).json({ error: 'Error al obtener los datos' });
-//     }
-// }
-
 export async function cambiarPrivacidad(req, res) {
     await conectar();
     const {id} = req.params;
@@ -122,29 +113,19 @@ async function leer(req, res) {
         res.status(500).json({ error: 'Error al obtener el contacto' });
     }
 }
+
 async function actualizar(req, res) {
-    const { id } = req.params;
-    const usuario = req.usuario;
-    const contacto = await contactos.findOne({ _id: new ObjectId(id) });
+    try {
+        const id = req.params.id;
+        const contacto = req.body;
+        await Datos.actualizar(id, contacto);
+        res.json({ mensaje: 'Contacto actualizado' });
+    } catch (error) {
+        console.log(error)
 
-    if (!contacto) return res.status(404).json({ error: "Contacto no encontrado" });
-    if (contacto.propietario !== usuario.user && usuario.user !== "admin") {
-        return res.status(403).json({ error: "No tienes permisos para editar este contacto" });
+        res.status(500).json({ error: 'Error al actualizar el contacto' });
     }
-
-    await contactos.updateOne({ _id: new ObjectId(id) }, { $set: req.body });
-    res.json({ mensaje: "Contacto actualizado" });
 }
-// async function actualizar(req, res) {
-//     try {
-//         const id = req.params.id;
-//         const contacto = req.body;
-//         await Datos.actualizar(id, contacto);
-//         res.json({ mensaje: 'Contacto actualizado' });
-//     } catch (error) {
-//         res.status(500).json({ error: 'Error al actualizar el contacto' });
-//     }
-// }
 
 async function editar(req, res) {
     try {
@@ -158,3 +139,25 @@ async function editar(req, res) {
 }
 
 export default { listar, crear, borrar, leer, actualizar, editar, cambiarPrivacidad, cambiarVisibilidad };
+
+
+
+
+
+
+
+
+
+// async function actualizar(req, res) {
+//     const { id } = req.params;
+//     const usuario = req.usuario;
+//     const contacto = await contactos.findOne({ _id: new ObjectId(id) });
+
+//     if (!contacto) return res.status(404).json({ error: "Contacto no encontrado" });
+//     if (contacto.propietario !== usuario.user && usuario.user !== "admin") {
+//         return res.status(403).json({ error: "No tienes permisos para editar este contacto" });
+//     }
+
+//     await contactos.updateOne({ _id: new ObjectId(id) }, { $set: req.body });
+//     res.json({ mensaje: "Contacto actualizado" });
+// }

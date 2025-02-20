@@ -96,15 +96,16 @@ function App() {
   }, []);
 
   async function actualizar(contacto) {
+    console.log("Contacto en actualizar", contacto);
     if (contacto) {
       if (contacto._id) {
-        await Datos.editar(contacto);
+        await Datos.editar(contacto._id, contacto);
       } else {
         await Datos.agregar(contacto);
       }
       cargar();
     }
-    setContacto(null);
+    setContacto();
   }
 
   async function agregar(contacto) {

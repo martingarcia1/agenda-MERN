@@ -75,6 +75,7 @@ function Agrega({ contacto, alActualizar, esAdmin = false }) {
                 {contacto ? 'Editar Contacto' : 'Nuevo Contacto'}
             </h2>
             <form className="formulario">
+                <p>ID: {datos._id}</p>
                 <div className="grid-campos">
                     <div className="campo">
                         <label>

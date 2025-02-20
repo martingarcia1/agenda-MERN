@@ -98,7 +98,6 @@ app.put('/logout', validacion, (req, res) => {
   if(index !== -1){
     usuarios[index].token = null
   }
-
   // let usuario = req.usuario
   // delete usuario.token
   res.clearCookie('token')

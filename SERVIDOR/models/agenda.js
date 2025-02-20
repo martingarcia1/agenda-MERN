@@ -106,6 +106,7 @@ async function borrar(id) {
 
 async function actualizar(id, contacto) {
     await conectar();
+    delete contacto._id
     return await contactos.updateOne(
         { _id: new ObjectId(id) },
         { $set: contacto }
